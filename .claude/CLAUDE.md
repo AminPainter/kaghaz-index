@@ -9,3 +9,5 @@ Prefer camelCase over snake_case.
 Add a comment block on every class describing its purpose (not implementation details).
 
 This tool is LLM provider agnostic (ILlm interface). The current implementation uses Anthropic Claude via @langchain/anthropic.
+
+Extract complex conditional logic into named private methods that clarify intent.

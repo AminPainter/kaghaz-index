@@ -1,5 +1,5 @@
-import { TocMode } from "../types";
-import type { PageList, TocDetectionResult } from "../types";
+import { TocMode, TocDetectionResult } from "../types";
+import type { PageList } from "../types";
 import type { TocBlockFinder } from "./toc-block-finder";
 import type { TocPageNumberDetector } from "./toc-page-number-detector";
 
@@ -18,7 +18,7 @@ export class TocDetector {
     const tocPageIndices = await this.blockFinder.find(pages);
 
     if (tocPageIndices.length === 0) {
-      return { tocPageIndices: [], hasTocWithPageNumbers: false, mode: TocMode.SyntheticToc };
+      return TocDetectionResult.empty();
     }
 
     const hasTocWithPageNumbers = await this.pageNumberDetector.hasPageNumbers(
@@ -26,10 +26,10 @@ export class TocDetector {
       tocPageIndices,
     );
 
-    return {
+    return new TocDetectionResult(
       tocPageIndices,
       hasTocWithPageNumbers,
-      mode: hasTocWithPageNumbers ? TocMode.PageNumberOffset : TocMode.FuzzyMatch,
-    };
+      hasTocWithPageNumbers ? TocMode.PageNumberOffset : TocMode.FuzzyMatch,
+    );
   }
 }

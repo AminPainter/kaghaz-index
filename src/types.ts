@@ -35,10 +35,16 @@ export enum TocMode {
 }
 
 /** Output of Stage 2 — TOC detection */
-export interface TocDetectionResult {
-  tocPageIndices: number[];
-  hasTocWithPageNumbers: boolean;
-  mode: TocMode;
+export class TocDetectionResult {
+  constructor(
+    public readonly tocPageIndices: number[],
+    public readonly hasTocWithPageNumbers: boolean,
+    public readonly mode: TocMode,
+  ) {}
+
+  static empty(): TocDetectionResult {
+    return new TocDetectionResult([], false, TocMode.SyntheticToc);
+  }
 }
 
 /** A TOC entry with the printed page number (before offset correction) */
@@ -54,3 +60,12 @@ export interface ResolvedTocEntry {
   title: string;
   physicalIndex: number;
 }
+
+/** The result of verifying a single TOC entry against its page text */
+export interface TocEntryVerificationResult {
+  entryIndex: number;
+  entry: ResolvedTocEntry;
+  isCorrect: boolean;
+  reasoning: string;
+}
+

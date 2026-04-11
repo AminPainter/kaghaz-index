@@ -12,6 +12,10 @@ import { EntryLocator } from "./toc-processing/entry-locator";
 import { OffsetDetector } from "./toc-processing/offset-detector";
 import { PageNumberOffsetProcessor } from "./toc-processing/page-number-offset-processor";
 import { TocMode } from "./types";
+import { TitleAppearanceChecker } from "./toc-verification/title-appearance-checker";
+import { TocVerifier } from "./toc-verification/toc-verifier";
+import { IncorrectTocEntriesFixer } from "./toc-verification/incorrect-toc-entries-fixer";
+import { TocVerificationOrchestrator } from "./toc-verification/toc-verification-orchestrator";
 
 async function main() {
   const pdfPath = process.argv[2];
@@ -52,17 +56,37 @@ async function main() {
   console.log(`  Processing mode for Stage 3: Mode ${tocResult.mode}`);
 
   // Stage 3 — TOC processing
+  // TODO: implement Mode 2 (FuzzyMatch) processor
+  // TODO: implement Mode 3 (SyntheticToc) processor
   if (tocResult.mode === TocMode.PageNumberOffset) {
-    const processor = new PageNumberOffsetProcessor(
+    const stage3Processor = new PageNumberOffsetProcessor(
       new TocEntryExtractor(llm),
       new OffsetDetector(new EntryLocator(llm)),
     );
 
     console.log("\nProcessing TOC (Mode 1 — Page Number Offset)...");
-    const tocEntries = await processor.process(pageList, tocResult.tocPageIndices);
+    const tocEntries = await stage3Processor.process(pageList, tocResult.tocPageIndices);
 
     console.log(`\nExtracted ${tocEntries.length} TOC entries:`);
     for (const entry of tocEntries) {
+      const label = entry.headingLabel ? `${entry.headingLabel}. ` : "";
+      console.log(`  ${label}${entry.title} → physical page ${entry.physicalIndex}`);
+    }
+
+    // Stage 4 — TOC verification & correction
+    const verificationProcessor = new TocVerificationOrchestrator(
+      new TocVerifier(new TitleAppearanceChecker(llm)),
+      new IncorrectTocEntriesFixer(llm),
+    );
+
+    console.log("\nVerifying TOC (Stage 4)...");
+    const verifiedEntries = await verificationProcessor.process(
+      tocEntries,
+      pageList,
+    );
+
+    console.log(`\nVerified ${verifiedEntries.length} TOC entries:`);
+    for (const entry of verifiedEntries) {
       const label = entry.headingLabel ? `${entry.headingLabel}. ` : "";
       console.log(`  ${label}${entry.title} → physical page ${entry.physicalIndex}`);
     }
