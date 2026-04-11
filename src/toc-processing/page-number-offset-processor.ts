@@ -10,7 +10,7 @@ import type { OffsetDetector } from "./offset-detector";
  */
 export class PageNumberOffsetProcessor {
   constructor(
-    private readonly extractor: TocEntryExtractor,
+    private readonly tocEntryExtractor: TocEntryExtractor,
     private readonly offsetDetector: OffsetDetector,
   ) {}
 
@@ -18,7 +18,10 @@ export class PageNumberOffsetProcessor {
     pages: PageList,
     tocPageIndices: number[],
   ): Promise<ResolvedTocEntry[]> {
-    const rawEntries = await this.extractor.extract(pages, tocPageIndices);
+    const rawEntries = await this.tocEntryExtractor.extract(
+      pages,
+      tocPageIndices,
+    );
     const offset = await this.offsetDetector.detect(rawEntries, pages);
 
     return rawEntries.map((entry) => ({

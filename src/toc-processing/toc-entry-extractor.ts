@@ -29,9 +29,18 @@ export class TocEntryExtractor {
     pages: PageList,
     tocPageIndices: number[],
   ): Promise<PrintedTocEntry[]> {
-    const tocText = tocPageIndices.map((i) => pages[i].text).join("\n\n");
+    const allTocPagesText = tocPageIndices.map((i) => pages[i].text).join("\n\n");
+    const prompt = this.buildPrompt(allTocPagesText);
 
-    const prompt = `
+    const result = await this.llm.callWithStructuredOutput(
+      prompt,
+      rawTocEntrySchema,
+    );
+    return result.entries;
+  }
+
+  private buildPrompt(allTocPagesText: string): string {
+    return `
 You are a document structure analyst.
 Below is the table of contents extracted from a document.
 
@@ -44,12 +53,6 @@ Preserve the exact hierarchy from the TOC. Include all entries, even sub-section
 
 ## Table of Contents text:
 
-${tocText}`.trim();
-
-    const result = await this.llm.callWithStructuredOutput(
-      prompt,
-      rawTocEntrySchema,
-    );
-    return result.entries;
+${allTocPagesText}`.trim();
   }
 }
