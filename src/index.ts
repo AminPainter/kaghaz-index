@@ -24,6 +24,8 @@ import { NodeTextAttacher } from "./tree-enrichment/node-text-attacher";
 import { SummaryGenerator } from "./tree-enrichment/summary-generator";
 import { DocDescriptionGenerator } from "./tree-enrichment/doc-description-generator";
 import { TreeEnricher } from "./tree-enrichment/tree-enricher";
+import { IndexSaver } from "./index-output/index-saver";
+import { basename, extname } from "path";
 
 async function main() {
   const pdfPath = process.argv[2];
@@ -119,8 +121,14 @@ async function main() {
     console.log("\nEnriching tree (Stage 6)...");
     await treeEnricher.enrich(tree, pageList);
 
-    console.log("\nEnriched document tree:");
-    console.log(JSON.stringify(tree, null, 2));
+    // Stage 7 — Save index
+    const indexSaver = new IndexSaver("./kaghaz-index-output");
+
+    console.log("\nSaving index (Stage 7)...");
+    const pdfFilename = basename(pdfPath, extname(pdfPath));
+    const outputPath = await indexSaver.save(tree, pdfFilename);
+
+    console.log(`\nIndex saved to: ${outputPath}`);
   }
 }
 

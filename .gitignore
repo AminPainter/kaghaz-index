@@ -165,3 +165,6 @@ build/
 # Secrets
 *.pem
 *.key
+
+# kaghaz-index output
+kaghaz-index-output/
