@@ -18,7 +18,7 @@ export class TreeBuilder {
       this.popTillTopOfStackBecomesParentOfCurrentEntry(stack, entry);
 
       const parent = stack.peek().node;
-      parent.nodes.push(node);
+      parent.children.push(node);
 
       stack.push({
         depth: this.calculateDepthOfNode(entry.headingLabel),
@@ -31,21 +31,25 @@ export class TreeBuilder {
 
   private createRootNode(entries: RangedTocEntry[]): TreeNode {
     return {
-      title: "Document Root",
-      headingLabel: "0",
-      startIndex: 0,
-      endIndex: entries.length > 0 ? entries[entries.length - 1].endIndex : 0,
-      nodes: [],
+      data: {
+        title: "Document Root",
+        headingLabel: "0",
+        startIndex: 0,
+        endIndex: entries.length > 0 ? entries[entries.length - 1].endIndex : 0,
+      },
+      children: [],
     };
   }
 
   private toTreeNode(entry: RangedTocEntry): TreeNode {
     return {
-      title: entry.title,
-      headingLabel: entry.headingLabel,
-      startIndex: entry.startIndex,
-      endIndex: entry.endIndex,
-      nodes: [],
+      data: {
+        title: entry.title,
+        headingLabel: entry.headingLabel,
+        startIndex: entry.startIndex,
+        endIndex: entry.endIndex,
+      },
+      children: [],
     };
   }
 

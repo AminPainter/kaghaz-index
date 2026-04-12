@@ -19,6 +19,11 @@ import { TocVerificationOrchestrator } from "./toc-verification/toc-verification
 import { PageRangeCalculator } from "./tree-assembly/page-range-calculator";
 import { TreeBuilder } from "./tree-assembly/tree-builder";
 import { TreeAssembler } from "./tree-assembly/tree-assembler";
+import { NodeIdWriter } from "./tree-enrichment/node-id-writer";
+import { NodeTextAttacher } from "./tree-enrichment/node-text-attacher";
+import { SummaryGenerator } from "./tree-enrichment/summary-generator";
+import { DocDescriptionGenerator } from "./tree-enrichment/doc-description-generator";
+import { TreeEnricher } from "./tree-enrichment/tree-enricher";
 
 async function main() {
   const pdfPath = process.argv[2];
@@ -103,7 +108,18 @@ async function main() {
     console.log("\nAssembling tree (Stage 5)...");
     const tree = await treeAssembler.assemble(verifiedEntries, pageList.length);
 
-    console.log("\nDocument tree:");
+    // Stage 6 — Enrichment
+    const treeEnricher = new TreeEnricher(
+      new NodeIdWriter(),
+      new NodeTextAttacher(),
+      new SummaryGenerator(llm),
+      new DocDescriptionGenerator(llm),
+    );
+
+    console.log("\nEnriching tree (Stage 6)...");
+    await treeEnricher.enrich(tree, pageList);
+
+    console.log("\nEnriched document tree:");
     console.log(JSON.stringify(tree, null, 2));
   }
 }
