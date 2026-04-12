@@ -6,19 +6,14 @@ const summarySchema = z.object({
   summary: z.string().describe("A concise 2-3 sentence summary of the section"),
 });
 
-const DEFAULT_CONCURRENCY = 10;
-
 /**
  * Generates LLM summaries for every node in the tree using a bottom-up,
  * level-by-level approach. Leaf nodes are summarized from their raw text,
- * parent nodes from their children's summaries. Each level is processed
- * concurrently with a configurable concurrency limit.
+ * parent nodes from their children's summaries. Concurrency and rate
+ * limiting are delegated to the ILlm implementation.
  */
 export class SummaryGenerator {
-  constructor(
-    private readonly llm: ILlm,
-    private readonly concurrency: number = DEFAULT_CONCURRENCY,
-  ) {}
+  constructor(private readonly llm: ILlm) {}
 
   async generate(tree: Tree<TreeNodeData>): Promise<void> {
     const depths = tree.groupByDepth();
@@ -36,13 +31,7 @@ export class SummaryGenerator {
     nodes: ITreeNode<TreeNodeData>[],
     tree: Tree<TreeNodeData>,
   ): Promise<void> {
-    // Without batching, a level with 200 nodes would fire 200 LLM requests
-    // simultaneously, overwhelming the API with rate limit errors. Batching
-    // caps concurrent requests — each batch must complete before the next starts.
-    for (let i = 0; i < nodes.length; i += this.concurrency) {
-      const batch = nodes.slice(i, i + this.concurrency);
-      await Promise.all(batch.map((node) => this.summarizeNode(node, tree)));
-    }
+    await Promise.all(nodes.map((node) => this.summarizeNode(node, tree)));
   }
 
   private async summarizeNode(

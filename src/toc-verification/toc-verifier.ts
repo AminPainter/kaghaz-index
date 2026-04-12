@@ -9,17 +9,15 @@ import type { TitleAppearanceChecker } from "./title-appearance-checker";
 
 type VerificationTask = () => Promise<TocEntryVerificationResult>;
 
-const DEFAULT_CONCURRENCY = 10;
-
 /**
  * Verifies all TOC entries concurrently by checking whether each entry's
  * title actually appears on the page it maps to. Produces an aggregate
  * accuracy score and categorises entries as correct or incorrect.
+ * Concurrency and rate limiting are delegated to the ILlm implementation.
  */
 export class TocVerifier {
   constructor(
     private readonly titleAppearanceChecker: TitleAppearanceChecker,
-    private readonly concurrency: number = DEFAULT_CONCURRENCY,
   ) {}
 
   async verify(
@@ -28,7 +26,7 @@ export class TocVerifier {
   ): Promise<TocVerificationReport> {
     if (tocEntries.length === 0) return TocVerificationReport.empty();
 
-    const results = await this.runWithConcurrencyLimit(tocEntries, pages);
+    const results = await this.runAll(tocEntries, pages);
 
     const correctIndices = new Set<number>();
     const incorrectIndices = new Set<number>();
@@ -49,14 +47,12 @@ export class TocVerifier {
     });
   }
 
-  private async runWithConcurrencyLimit(
+  private async runAll(
     tocEntries: ResolvedTocEntry[],
     pages: PageList,
   ): Promise<TocEntryVerificationResult[]> {
     const tasks = this.buildVerificationTasks(tocEntries, pages);
-
-    const results = await this.runTasksInBatches(tasks);
-
+    const results = await Promise.all(tasks.map((taskFn) => taskFn()));
     return this.sortByEntryIndex(results);
   }
 
@@ -64,23 +60,6 @@ export class TocVerifier {
     results: TocEntryVerificationResult[],
   ): TocEntryVerificationResult[] {
     return results.sort((a, b) => a.entryIndex - b.entryIndex);
-  }
-
-  private async runTasksInBatches(
-    tasks: VerificationTask[],
-  ): Promise<TocEntryVerificationResult[]> {
-    const results: TocEntryVerificationResult[] = [];
-
-    for (let i = 0; i < tasks.length; i += this.concurrency) {
-      const batch = tasks.slice(i, i + this.concurrency);
-
-      // Each batch must fully complete before the next batch starts
-      // this caps the number of concurrent LLM calls to avoid overwhelming the provider
-      const batchResults = await Promise.all(batch.map((taskFn) => taskFn()));
-      results.push(...batchResults);
-    }
-
-    return results;
   }
 
   private buildVerificationTasks(
