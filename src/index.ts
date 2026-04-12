@@ -24,7 +24,7 @@ import { NodeTextAttacher } from "./tree-enrichment/node-text-attacher";
 import { SummaryGenerator } from "./tree-enrichment/summary-generator";
 import { DocDescriptionGenerator } from "./tree-enrichment/doc-description-generator";
 import { TreeEnricher } from "./tree-enrichment/tree-enricher";
-import { IndexSaver } from "./index-output/index-saver";
+import { IndexSaver } from "./index-saving/index-saver";
 import { basename, extname } from "path";
 
 async function main() {
@@ -44,7 +44,9 @@ async function main() {
   const pageList = await indexer.index(pdfPath);
 
   console.log(`Total pages: ${pageList.length}`);
-  console.log(`Total tokens: ${pageList.reduce((sum, p) => sum + p.tokenCount, 0)}`);
+  console.log(
+    `Total tokens: ${pageList.reduce((sum, p) => sum + p.tokenCount, 0)}`,
+  );
   console.log("\nPer-page token counts:");
   pageList.forEach((page, i) => {
     console.log(`  Page ${i + 1}: ${page.tokenCount} tokens`);
@@ -75,12 +77,17 @@ async function main() {
     );
 
     console.log("\nProcessing TOC (Mode 1 — Page Number Offset)...");
-    const tocEntries = await stage3Processor.process(pageList, tocResult.tocPageIndices);
+    const tocEntries = await stage3Processor.process(
+      pageList,
+      tocResult.tocPageIndices,
+    );
 
     console.log(`\nExtracted ${tocEntries.length} TOC entries:`);
     for (const entry of tocEntries) {
       const label = entry.headingLabel ? `${entry.headingLabel}. ` : "";
-      console.log(`  ${label}${entry.title} → physical page ${entry.physicalIndex}`);
+      console.log(
+        `  ${label}${entry.title} → physical page ${entry.physicalIndex}`,
+      );
     }
 
     // Stage 4 — TOC verification & correction
@@ -98,7 +105,9 @@ async function main() {
     console.log(`\nVerified ${verifiedEntries.length} TOC entries:`);
     for (const entry of verifiedEntries) {
       const label = entry.headingLabel ? `${entry.headingLabel}. ` : "";
-      console.log(`  ${label}${entry.title} → physical page ${entry.physicalIndex}`);
+      console.log(
+        `  ${label}${entry.title} → physical page ${entry.physicalIndex}`,
+      );
     }
 
     // Stage 5 — Tree assembly
