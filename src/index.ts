@@ -16,6 +16,9 @@ import { TitleAppearanceChecker } from "./toc-verification/title-appearance-chec
 import { TocVerifier } from "./toc-verification/toc-verifier";
 import { IncorrectTocEntriesFixer } from "./toc-verification/incorrect-toc-entries-fixer";
 import { TocVerificationOrchestrator } from "./toc-verification/toc-verification-orchestrator";
+import { PageRangeCalculator } from "./tree-assembly/page-range-calculator";
+import { TreeBuilder } from "./tree-assembly/tree-builder";
+import { TreeAssembler } from "./tree-assembly/tree-assembler";
 
 async function main() {
   const pdfPath = process.argv[2];
@@ -90,6 +93,18 @@ async function main() {
       const label = entry.headingLabel ? `${entry.headingLabel}. ` : "";
       console.log(`  ${label}${entry.title} → physical page ${entry.physicalIndex}`);
     }
+
+    // Stage 5 — Tree assembly
+    const treeAssembler = new TreeAssembler(
+      new PageRangeCalculator(),
+      new TreeBuilder(),
+    );
+
+    console.log("\nAssembling tree (Stage 5)...");
+    const tree = await treeAssembler.assemble(verifiedEntries, pageList.length);
+
+    console.log("\nDocument tree:");
+    console.log(JSON.stringify(tree, null, 2));
   }
 }
 

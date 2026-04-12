@@ -69,3 +69,20 @@ export interface TocEntryVerificationResult {
   reasoning: string;
 }
 
+/** A resolved TOC entry augmented with start/end page range */
+export interface RangedTocEntry extends ResolvedTocEntry {
+  startIndex: number;
+  endIndex: number;
+}
+
+/** A node in the hierarchical document tree (output of Stage 5) */
+export interface TreeNode {
+  title: string;
+  headingLabel: string;
+  startIndex: number;
+  endIndex: number; // exclusive
+  nodes: TreeNode[];
+}
+
+/** A stack frame pairing a tree node with its nesting depth */
+export type DepthNodePair = { depth: number; node: TreeNode };
