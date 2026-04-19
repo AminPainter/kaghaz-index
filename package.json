@@ -22,6 +22,7 @@
     "build": "tsup src/index.ts --format esm --dts --out-dir dist",
     "example:index": "tsx examples/build-index.ts",
     "example:retrieve": "tsx examples/retrieve.ts",
+    "example:ask": "tsx examples/ask.ts",
     "typecheck": "tsc",
     "prepublishOnly": "pnpm build && pnpm typecheck"
   },
