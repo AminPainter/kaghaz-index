@@ -11,13 +11,5 @@ export type { ILlm } from "./shared/llm/llm.interface";
 export { AnthropicLlm } from "./shared/llm/anthropic-llm";
 export type { AnthropicLlmConfig } from "./shared/llm/anthropic-llm";
 
-export type {
-  ITreeNode,
-  TreeNode,
-  TreeNodeData,
-} from "./shared/data-structures/types";
-export type {
-  RetrievalResult,
-  ResolvedNode,
-  StrippedNodeData,
-} from "./retrieval/types";
+export type { TreeNode } from "./shared/data-structures/types";
+export type { RetrievalResult, ResolvedNode } from "./retrieval/types";
