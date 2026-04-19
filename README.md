@@ -21,7 +21,7 @@ PDF → PageList → TocDetectionResult → ResolvedTocEntry[] → verified entr
 ## Setup
 
 ```
-npm install
+pnpm install
 ```
 
 Create a `.env` file with your Anthropic API key:
@@ -33,14 +33,14 @@ ANTHROPIC_API_KEY=your-key-here
 ## Usage
 
 ```
-npm run dev -- <path-to-pdf>
+pnpm example:index <path-to-pdf>
 ```
 
 ## Scripts
 
 | Command | Description |
 |---|---|
-| `npm run dev` | Run with tsx |
-| `npm run build` | Bundle for production |
-| `npm run typecheck` | Type-check with tsc |
-| `npm start` | Run the production build |
+| `pnpm dev` | Run with tsx |
+| `pnpm build` | Bundle for production |
+| `pnpm typecheck` | Type-check with tsc |
+| `pnpm start` | Run the production build |

@@ -16,6 +16,7 @@
     "README.md"
   ],
   "sideEffects": false,
+  "packageManager": "pnpm@10.10.0",
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --out-dir dist",
     "example:index": "tsx examples/build-index.ts",
@@ -37,6 +38,7 @@
     "@langchain/core": "^1.1.39",
     "dotenv": "^17.4.1",
     "langchain": "^1.3.1",
-    "unpdf": "^1.4.0"
+    "unpdf": "^1.4.0",
+    "zod": "^4.3.6"
   }
 }
