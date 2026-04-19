@@ -1,6 +1,7 @@
 import { z } from "zod";
-import type { ILlm, TreeNodeData } from "../types";
-import type { Tree } from "../tree";
+import type { ILlm } from "../../shared/llm/llm.interface";
+import type { TreeNodeData } from "../../shared/data-structures/types";
+import type { Tree } from "../../shared/data-structures/tree";
 
 const docDescriptionSchema = z.object({
   description: z

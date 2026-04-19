@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { ILlm } from "../types";
+import type { ILlm } from "../../shared/llm/llm.interface";
 
 const tocClassificationSchema = z.object({
   thinking: z

@@ -1,5 +1,6 @@
 import { z } from "zod";
-import type { ILlm, PageList } from "../types";
+import type { ILlm } from "../../shared/llm/llm.interface";
+import type { PageList } from "../types";
 
 const pageNumberDetectionSchema = z.object({
   thinking: z

@@ -1,5 +1,3 @@
-import type { ZodType } from "zod";
-
 /** A single page's extracted data */
 export interface PageEntry {
   text: string;
@@ -17,14 +15,6 @@ export interface ITokenCounter {
 /** Extracts per-page text from a document */
 export interface IPageExtractor {
   extract(input: string | Buffer): Promise<string[]>;
-}
-
-/** Sends a prompt to an LLM and returns a structured response matching the given Zod schema */
-export interface ILlm {
-  callWithStructuredOutput<T extends Record<string, any>>(
-    prompt: string,
-    schema: ZodType<T>,
-  ): Promise<T>;
 }
 
 /** The processing mode that Stage 3 will use */
@@ -74,27 +64,3 @@ export interface RangedTocEntry extends ResolvedTocEntry {
   startIndex: number;
   endIndex: number;
 }
-
-/** Enforces a uniform shape for all tree nodes: payload in data, subtree in children */
-export interface ITreeNode<T> {
-  data: T;
-  children: ITreeNode<T>[];
-}
-
-/** The payload stored in each document tree node */
-export interface TreeNodeData {
-  title: string;
-  headingLabel: string;
-  startIndex: number;
-  endIndex: number; // exclusive
-  nodeId?: string;
-  text?: string;
-  summary?: string;
-  docDescription?: string;
-}
-
-/** A document tree node (output of Stage 5, enriched in Stage 6) */
-export type TreeNode = ITreeNode<TreeNodeData>;
-
-/** A stack frame pairing a tree node with its nesting depth */
-export type DepthNodePair = { depth: number; node: TreeNode };

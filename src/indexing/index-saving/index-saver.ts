@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
-import type { TreeNode } from "../types";
+import type { TreeNode } from "../../shared/data-structures/types";
 
 /**
  * Persists a document tree to disk as a pretty-printed JSON file.

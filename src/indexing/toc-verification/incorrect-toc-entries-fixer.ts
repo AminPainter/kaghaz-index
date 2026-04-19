@@ -1,5 +1,6 @@
 import { z } from "zod";
-import type { ILlm, PageList, ResolvedTocEntry } from "../types";
+import type { ILlm } from "../../shared/llm/llm.interface";
+import type { PageList, ResolvedTocEntry } from "../types";
 import type { TocVerificationReport } from "./toc-verification-report";
 
 const fixResultSchema = z.object({

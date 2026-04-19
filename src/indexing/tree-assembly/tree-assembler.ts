@@ -1,4 +1,5 @@
-import type { ResolvedTocEntry, TreeNode } from "../types";
+import type { ResolvedTocEntry } from "../types";
+import type { TreeNode } from "../../shared/data-structures/types";
 import { PageRangeCalculator } from "./page-range-calculator";
 import { TreeBuilder } from "./tree-builder";
 

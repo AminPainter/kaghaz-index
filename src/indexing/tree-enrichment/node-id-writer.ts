@@ -1,5 +1,5 @@
-import type { TreeNodeData } from "../types";
-import type { Tree } from "../tree";
+import type { TreeNodeData } from "../../shared/data-structures/types";
+import type { Tree } from "../../shared/data-structures/tree";
 
 /**
  * Assigns a sequential, zero-padded 4-digit string ID to every node

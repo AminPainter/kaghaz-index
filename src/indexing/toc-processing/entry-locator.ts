@@ -1,5 +1,6 @@
 import { z } from "zod";
-import type { ILlm, PageList, PrintedTocEntry } from "../types";
+import type { ILlm } from "../../shared/llm/llm.interface";
+import type { PageList, PrintedTocEntry } from "../types";
 
 const DEFAULT_BUFFER_BEFORE = 5;
 const DEFAULT_BUFFER_AFTER = 15;

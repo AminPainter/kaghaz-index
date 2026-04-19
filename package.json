@@ -3,11 +3,24 @@
   "version": "1.0.0",
   "type": "module",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
   "scripts": {
-    "dev": "tsx src/index.ts",
-    "build": "tsup src/index.ts --format esm --out-dir dist",
-    "typecheck": "tsc",
-    "start": "node dist/index.js"
+    "build": "tsup src/index.ts --format esm --dts --out-dir dist",
+    "example:index": "tsx examples/build-index.ts",
+    "example:retrieve": "tsx examples/retrieve.ts",
+    "typecheck": "tsc"
   },
   "keywords": [],
   "author": "",

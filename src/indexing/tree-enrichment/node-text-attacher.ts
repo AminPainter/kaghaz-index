@@ -1,5 +1,6 @@
-import type { ITreeNode, PageList, TreeNodeData } from "../types";
-import type { Tree } from "../tree";
+import type { ITreeNode, TreeNodeData } from "../../shared/data-structures/types";
+import type { PageList } from "../types";
+import type { Tree } from "../../shared/data-structures/tree";
 
 /**
  * Attaches raw PDF text to leaf nodes by concatenating pages

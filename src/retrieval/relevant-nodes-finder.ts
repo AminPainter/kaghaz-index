@@ -1,6 +1,7 @@
 import { z } from "zod";
-import type { ILlm, ITreeNode } from "../types";
-import type { StrippedNodeData } from "./tree-text-stripper";
+import type { ILlm } from "../shared/llm/llm.interface";
+import type { ITreeNode } from "../shared/data-structures/types";
+import type { StrippedNodeData } from "./types";
 
 const relevantNodesSchema = z.object({
   thinking: z

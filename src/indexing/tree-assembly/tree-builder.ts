@@ -1,5 +1,6 @@
-import { Stack } from "../stack";
-import type { DepthNodePair, RangedTocEntry, TreeNode } from "../types";
+import { Stack } from "../../shared/data-structures/stack";
+import type { DepthNodePair, TreeNode } from "../../shared/data-structures/types";
+import type { RangedTocEntry } from "../types";
 
 /**
  * Converts a flat list of ranged TOC entries into a nested tree

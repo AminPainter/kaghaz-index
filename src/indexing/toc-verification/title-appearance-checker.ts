@@ -1,10 +1,13 @@
 import { z } from "zod";
-import type { ILlm, ResolvedTocEntry, TocEntryVerificationResult } from "../types";
+import type { ILlm } from "../../shared/llm/llm.interface";
+import type { ResolvedTocEntry, TocEntryVerificationResult } from "../types";
 
 const appearanceSchema = z.object({
   thinking: z
     .string()
-    .describe("Brief reasoning about whether the section title appears on this page"),
+    .describe(
+      "Brief reasoning about whether the section title appears on this page",
+    ),
   appears: z
     .boolean()
     .describe("Whether the section title appears or starts on this page"),
@@ -23,7 +26,10 @@ export class TitleAppearanceChecker {
     entryIndex: number;
     pageText: string;
   }): Promise<TocEntryVerificationResult> {
-    const prompt = this.buildPrompt({ entry: args.entry, pageText: args.pageText });
+    const prompt = this.buildPrompt({
+      entry: args.entry,
+      pageText: args.pageText,
+    });
 
     const result = await this.llm.callWithStructuredOutput(
       prompt,
@@ -38,7 +44,10 @@ export class TitleAppearanceChecker {
     };
   }
 
-  private buildPrompt(args: { entry: ResolvedTocEntry; pageText: string }): string {
+  private buildPrompt(args: {
+    entry: ResolvedTocEntry;
+    pageText: string;
+  }): string {
     return `
 You are a document structure verifier.
 

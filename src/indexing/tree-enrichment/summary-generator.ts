@@ -1,6 +1,10 @@
 import { z } from "zod";
-import type { ILlm, ITreeNode, TreeNodeData } from "../types";
-import type { Tree } from "../tree";
+import type { ILlm } from "../../shared/llm/llm.interface";
+import type {
+  ITreeNode,
+  TreeNodeData,
+} from "../../shared/data-structures/types";
+import type { Tree } from "../../shared/data-structures/tree";
 
 const summarySchema = z.object({
   summary: z.string().describe("A concise 2-3 sentence summary of the section"),

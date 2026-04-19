@@ -1,17 +1,10 @@
-import type { Tree } from "../tree";
-import type { TreeNodeData } from "../types";
-import type { ContextAssembler, ResolvedNode } from "./context-assembler";
+import type { Tree } from "../shared/data-structures/tree";
+import type { TreeNodeData } from "../shared/data-structures/types";
+import type { RetrievalResult } from "./types";
+import type { ContextAssembler } from "./context-assembler";
 import type { NodeMapBuilder } from "./node-map-builder";
 import type { RelevantNodesFinder } from "./relevant-nodes-finder";
 import type { TreeTextStripper } from "./tree-text-stripper";
-
-/** Final output of a retrieval pass. */
-export interface RetrievalResult {
-  thinking: string;
-  selectedNodeIds: string[];
-  resolvedNodes: ResolvedNode[];
-  context: string;
-}
 
 /**
  * Orchestrates LLM-driven tree search retrieval: strip text from

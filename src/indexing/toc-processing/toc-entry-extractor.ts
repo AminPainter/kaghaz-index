@@ -1,5 +1,6 @@
 import { z } from "zod";
-import type { ILlm, PageList, PrintedTocEntry } from "../types";
+import type { ILlm } from "../../shared/llm/llm.interface";
+import type { PageList, PrintedTocEntry } from "../types";
 
 const rawTocEntrySchema = z.object({
   entries: z.array(
@@ -10,10 +11,7 @@ const rawTocEntrySchema = z.object({
           "Section numbering such as '1', '1.1', '2.3.4', or 'A' for appendices",
         ),
       title: z.string().describe("Title of the section or chapter"),
-      page: z
-        .number()
-        .int()
-        .describe("Printed page number shown in the TOC"),
+      page: z.number().int().describe("Printed page number shown in the TOC"),
     }),
   ),
 });
@@ -29,7 +27,9 @@ export class TocEntryExtractor {
     pages: PageList,
     tocPageIndices: number[],
   ): Promise<PrintedTocEntry[]> {
-    const allTocPagesText = tocPageIndices.map((i) => pages[i].text).join("\n\n");
+    const allTocPagesText = tocPageIndices
+      .map((i) => pages[i].text)
+      .join("\n\n");
     const prompt = this.buildPrompt(allTocPagesText);
 
     const result = await this.llm.callWithStructuredOutput(

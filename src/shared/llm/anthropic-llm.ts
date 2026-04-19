@@ -1,6 +1,6 @@
 import { ChatAnthropic } from "@langchain/anthropic";
 import type { ZodType } from "zod";
-import type { ILlm } from "../types";
+import type { ILlm } from "./llm.interface";
 
 /**
  * ILlm implementation that uses LangChain's ChatAnthropic with
@@ -9,18 +9,22 @@ import type { ILlm } from "../types";
  * tokens/min): requests are serialized via maxConcurrency=1 and
  * 429/transient errors trigger exponential backoff via maxRetries.
  */
+export interface AnthropicLlmConfig {
+  apiKey?: string;
+  model?: string;
+  maxRetries?: number;
+}
+
 export class AnthropicLlm implements ILlm {
   private readonly model: ChatAnthropic;
 
-  constructor(
-    modelName: string = "claude-haiku-4-5-20251001",
-    maxRetries: number = 10,
-  ) {
+  constructor(config: AnthropicLlmConfig = {}) {
     this.model = new ChatAnthropic({
-      model: modelName,
+      apiKey: config.apiKey,
+      model: config.model ?? "claude-haiku-4-5-20251001",
       temperature: 0,
       maxConcurrency: 1,
-      maxRetries,
+      maxRetries: config.maxRetries ?? 10,
     });
   }
 

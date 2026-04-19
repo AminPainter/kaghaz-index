@@ -1,11 +1,5 @@
-import type { TreeNode } from "../types";
-
-/** A single selected node resolved back to its text. */
-export interface ResolvedNode {
-  nodeId: string;
-  title: string;
-  text: string;
-}
+import type { TreeNode } from "../shared/data-structures/types";
+import type { ResolvedNode } from "./types";
 
 /**
  * Resolves the node ids returned by the LLM back into concrete

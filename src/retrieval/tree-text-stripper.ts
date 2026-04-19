@@ -1,8 +1,6 @@
-import type { Tree } from "../tree";
-import type { ITreeNode, TreeNodeData } from "../types";
-
-/** A TreeNodeData without the heavyweight text field. */
-export type StrippedNodeData = Omit<TreeNodeData, "text">;
+import type { Tree } from "../shared/data-structures/tree";
+import type { ITreeNode, TreeNodeData } from "../shared/data-structures/types";
+import type { StrippedNodeData } from "./types";
 
 /**
  * Produces a deep copy of a document tree with the full-text field

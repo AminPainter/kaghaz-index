@@ -1,5 +1,6 @@
-import type { PageList, TreeNode } from "../types";
-import { Tree } from "../tree";
+import type { PageList } from "../types";
+import type { TreeNode } from "../../shared/data-structures/types";
+import { Tree } from "../../shared/data-structures/tree";
 import type { NodeIdWriter } from "./node-id-writer";
 import type { NodeTextAttacher } from "./node-text-attacher";
 import type { SummaryGenerator } from "./summary-generator";

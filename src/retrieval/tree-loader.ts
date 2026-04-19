@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
-import { Tree } from "../tree";
-import type { TreeNode, TreeNodeData } from "../types";
+import { Tree } from "../shared/data-structures/tree";
+import type { TreeNode, TreeNodeData } from "../shared/data-structures/types";
 
 /**
  * Loads a persisted document tree JSON file from disk and wraps

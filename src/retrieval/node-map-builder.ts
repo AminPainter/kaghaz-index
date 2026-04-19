@@ -1,5 +1,5 @@
-import type { Tree } from "../tree";
-import type { TreeNode, TreeNodeData } from "../types";
+import type { Tree } from "../shared/data-structures/tree";
+import type { TreeNode, TreeNodeData } from "../shared/data-structures/types";
 
 /**
  * Flattens a document tree into a lookup from node id to node.
