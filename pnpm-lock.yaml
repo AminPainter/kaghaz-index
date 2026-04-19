@@ -14,9 +14,6 @@ importers:
       '@langchain/core':
         specifier: ^1.1.39
         version: 1.1.40
-      dotenv:
-        specifier: ^17.4.1
-        version: 17.4.2
       langchain:
         specifier: ^1.3.1
         version: 1.3.3(@langchain/core@1.1.40)
@@ -30,6 +27,9 @@ importers:
       '@types/node':
         specifier: ^25.6.0
         version: 25.6.0
+      dotenv:
+        specifier: ^17.4.1
+        version: 17.4.2
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(tsx@4.21.0)(typescript@6.0.3)

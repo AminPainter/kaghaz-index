@@ -18,29 +18,38 @@ The system processes a PDF through seven sequential stages to produce an enriche
 PDF → PageList → TocDetectionResult → ResolvedTocEntry[] → verified entries → Tree → enriched Tree → .kaghaz-index.json
 ```
 
-## Setup
+## Install
 
 ```
-pnpm install
+npm install kaghaz-index
 ```
 
-Create a `.env` file with your Anthropic API key:
-
-```
-ANTHROPIC_API_KEY=your-key-here
-```
+You'll need an Anthropic API key available at runtime (e.g. `ANTHROPIC_API_KEY` in your environment).
 
 ## Usage
 
+Build an index from a PDF, then query it:
+
+```ts
+import { PageIndex, PageIndexRetriever, AnthropicLlm } from "kaghaz-index";
+
+const llm = new AnthropicLlm({ apiKey: process.env.ANTHROPIC_API_KEY! });
+
+const pageIndex = new PageIndex({ llm });
+const tree = await pageIndex.build("./my-doc.pdf");
+
+const retriever = new PageIndexRetriever({ llm, tree });
+const result = await retriever.retrieve({ query: "What does section 3 cover?" });
+
+console.log(result);
 ```
+
+## Local development
+
+```
+pnpm install
 pnpm example:index <path-to-pdf>
+pnpm example:retrieve <path-to-index-json> "<query>"
 ```
 
-## Scripts
-
-| Command | Description |
-|---|---|
-| `pnpm dev` | Run with tsx |
-| `pnpm build` | Bundle for production |
-| `pnpm typecheck` | Type-check with tsc |
-| `pnpm start` | Run the production build |
+Create a `.env` with `ANTHROPIC_API_KEY=...` for the examples.
